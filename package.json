@@ -1,7 +1,7 @@
 {
 	"name": "react-use-sse",
 	"description": "React hook for real-time updates with SSE. Plug in, stream on. ⚡️",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"author": "StyleShit",
 	"license": "MIT",
 	"repository": {
