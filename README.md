@@ -76,3 +76,15 @@ useSSE({
   withCredentials: true,
 });
 ```
+
+## Development
+
+To run the development client and server use:
+
+```bash
+npm run dev
+```
+
+This will start the client on `http://localhost:5173` and the server on `http://localhost:8888`.
+
+There is no need to open the server URL in the browser, as the client will automatically connect to it (and because you'll be stuck in an infinite loop).
