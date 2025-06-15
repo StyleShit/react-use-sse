@@ -83,12 +83,12 @@ describe('useSSE', () => {
 		expect(MockEventSource.instance.getStatus()).toBe('closed');
 	});
 
-	it('should support parsing function', async () => {
+	it('should support a transformation function', async () => {
 		// Arrange.
 		const { result } = renderHook(() =>
 			useSSE({
 				url: 'http://test.com/sse',
-				parseFn: async (data: string) =>
+				transform: async (data: string) =>
 					JSON.parse(data) as { message: string },
 			}),
 		);
@@ -141,13 +141,13 @@ describe('useSSE', () => {
 		});
 	});
 
-	it('should handle parsing error', async () => {
+	it('should handle transformation error', async () => {
 		// Arrange.
 		const { result } = renderHook(() =>
 			useSSE({
 				url: 'http://test.com/sse',
-				parseFn: async () => {
-					throw new Error('Parsing error');
+				transform: async () => {
+					throw new Error('Transformation error');
 				},
 			}),
 		);

@@ -4,13 +4,13 @@ import type { SSEData, SSEStatus } from './types';
 export type UseSSEArgs<TData> = {
 	url: string;
 	withCredentials?: boolean;
-	parseFn?: (data: string) => TData | Promise<TData>;
+	transform?: (data: string) => TData | Promise<TData>;
 };
 
 export function useSSE<TData = unknown>({
 	url,
 	withCredentials,
-	parseFn,
+	transform,
 }: UseSSEArgs<TData>): SSEData<TData> {
 	const [data, setData] = useState<TData | null>(null);
 	const [status, setStatus] = useState<SSEStatus>('pending');
@@ -20,7 +20,7 @@ export function useSSE<TData = unknown>({
 
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
 		eventSource.addEventListener('message', async (event) => {
-			if (!parseFn) {
+			if (!transform) {
 				setStatus('success');
 				setData(event.data as TData);
 
@@ -28,7 +28,7 @@ export function useSSE<TData = unknown>({
 			}
 
 			try {
-				const value = await parseFn(event.data as string);
+				const value = await transform(event.data as string);
 
 				setStatus('success');
 				setData(value);
@@ -46,7 +46,7 @@ export function useSSE<TData = unknown>({
 		return () => {
 			eventSource.close();
 		};
-	}, [url, withCredentials, parseFn]);
+	}, [url, withCredentials, transform]);
 
 	return {
 		data,
