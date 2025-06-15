@@ -1,9 +1,10 @@
 import { useSSE } from '../../src';
 
 export const App = () => {
-	const { data, isPending, isError } = useSSE<string>(
-		'http://localhost:8888',
-	);
+	const { data, isPending, isError } = useSSE<{ random: string }>({
+		url: 'http://localhost:8888',
+		parseFn: JSON.parse,
+	});
 
 	if (isPending) {
 		return <div>Loading...</div>;
@@ -16,7 +17,7 @@ export const App = () => {
 	return (
 		<div>
 			<h1>React SSE</h1>
-			<p>{data}</p>
+			<p>{data.random}</p>
 		</div>
 	);
 };

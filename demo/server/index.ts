@@ -7,7 +7,11 @@ const server = http.createServer((req, res) => {
 	});
 
 	setInterval(() => {
-		res.write(`data:${new Date().toISOString()}\n\n`);
+		const data = {
+			random: Math.random() * 100000,
+		};
+
+		res.write(`data: ${JSON.stringify(data)}\n\n`);
 	}, 1000);
 });
 
