@@ -41,6 +41,9 @@
 	"devDependencies": {
 		"@changesets/cli": "^2.27.7",
 		"@eslint/js": "^9.9.0",
+		"@testing-library/dom": "^10.4.0",
+		"@testing-library/jest-dom": "^6.6.3",
+		"@testing-library/react": "^16.3.0",
 		"@types/eslint__js": "^8.42.3",
 		"@types/node": "^22.4.1",
 		"@types/react": "^19.1.8",
@@ -51,6 +54,7 @@
 		"eslint": "^9.9.0",
 		"eslint-plugin-react-hooks": "^5.2.0",
 		"globals": "^15.9.0",
+		"jsdom": "^26.1.0",
 		"prettier": "^3.3.3",
 		"react-dom": "^19.1.0",
 		"tsup": "^8.2.4",
