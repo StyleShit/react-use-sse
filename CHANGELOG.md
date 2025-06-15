@@ -1,5 +1,11 @@
 # react-use-sse
 
+## 0.0.2
+
+### Patch Changes
+
+- 890b407: Fix redundant disconnects on every re-render
+
 ## 0.0.1
 
 ### Patch Changes
