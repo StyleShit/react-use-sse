@@ -1,12 +1,12 @@
 {
-	"name": "create-typescript-package",
-	"description": "A template project for developing & publishing TypeScript packages",
+	"name": "react-use-sse",
+	"description": "React hook for real-time updates with SSE. Plug in, stream on. ⚡️",
 	"version": "0.0.0",
 	"author": "StyleShit",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/StyleShit/create-typescript-package"
+		"url": "https://github.com/StyleShit/react-use-sse"
 	},
 	"type": "module",
 	"main": "dist/index.cjs",
