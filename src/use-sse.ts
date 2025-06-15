@@ -46,7 +46,8 @@ export function useSSE<TData = unknown>({
 		return () => {
 			eventSource.close();
 		};
-	}, [url, withCredentials, transform]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- We don't want to disconnect for every `transform` change.
+	}, [url, withCredentials]);
 
 	return {
 		data,

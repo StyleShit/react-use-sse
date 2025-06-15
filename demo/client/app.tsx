@@ -1,9 +1,9 @@
 import { useSSE } from '../../src';
 
 export const App = () => {
-	const { data, isPending, isError } = useSSE<{ random: string }>({
+	const { data, isPending, isError } = useSSE({
 		url: 'http://localhost:8888',
-		transform: JSON.parse,
+		transform: (data) => JSON.parse(data) as { random: string },
 	});
 
 	if (isPending) {
