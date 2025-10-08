@@ -2,8 +2,9 @@
 // See: https://react.dev/reference/react/act#await-act-async-actfn
 //
 /* eslint-disable @typescript-eslint/require-await */
+import { useReducer } from 'react';
 import { act, renderHook } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi, afterEach } from 'vitest';
 import { useSSE } from '../';
 import { MockEventSource } from './mock-event-source';
 
@@ -11,6 +12,10 @@ import { MockEventSource } from './mock-event-source';
 globalThis.EventSource = MockEventSource as unknown as EventSource;
 
 describe('useSSE', () => {
+	afterEach(() => {
+		MockEventSource.instance.reset();
+	});
+
 	it('should set EventSource options', () => {
 		// Act.
 		renderHook(() =>
@@ -156,6 +161,87 @@ describe('useSSE', () => {
 			isSuccess: true,
 			isError: false,
 		});
+	});
+
+	it('should support dynamic transform callback', async () => {
+		// Arrange.
+		const { result } = renderHook(() => {
+			const [count, increment] = useReducer((x) => x + 1, 0);
+
+			const transform = (data: string) => {
+				const parsed = JSON.parse(data) as { random: string };
+
+				return {
+					...parsed,
+					count,
+				};
+			};
+
+			const sse = useSSE({
+				url: 'http://test.com/sse',
+				transform,
+			});
+
+			return {
+				sse,
+				count,
+				increment,
+			};
+		});
+
+		// Act - Open the connection.
+		await act(async () => {
+			MockEventSource.instance.open();
+		});
+
+		const closeSpy = vi.spyOn(MockEventSource.instance, 'close');
+
+		// Act - Emit a message from server.
+		await act(async () => {
+			const data = JSON.stringify({ message: 'test-data' });
+
+			MockEventSource.instance.emit('message', data);
+		});
+
+		// Assert.
+		expect(result.current.sse).toStrictEqual({
+			data: {
+				message: 'test-data',
+				count: 0,
+			},
+			status: 'success',
+			isPending: false,
+			isSuccess: true,
+			isError: false,
+		});
+
+		// Act - Increment & emit another message from server.
+		await act(async () => {
+			result.current.increment();
+		});
+
+		await act(async () => {
+			const data = JSON.stringify({ message: 'test-data-2' });
+
+			MockEventSource.instance.emit('message', data);
+		});
+
+		// Assert.
+		expect(result.current.count).toBe(1);
+
+		expect(result.current.sse).toStrictEqual({
+			data: {
+				message: 'test-data-2',
+				count: 1,
+			},
+			status: 'success',
+			isPending: false,
+			isSuccess: true,
+			isError: false,
+		});
+
+		// Ensure we don't close the connection for each `transform` change.
+		expect(closeSpy).not.toHaveBeenCalled();
 	});
 
 	it('should handle server error', async () => {

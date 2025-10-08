@@ -61,4 +61,10 @@ export class MockEventSource {
 	getOptions() {
 		return this.options;
 	}
+
+	reset() {
+		this.close();
+
+		MockEventSource.instance = undefined as unknown as MockEventSource;
+	}
 }

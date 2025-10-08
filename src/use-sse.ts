@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { SSEData, SSEStatus } from './types';
 
 export type UseSSEArgs<TData> = {
@@ -17,12 +17,17 @@ export function useSSE<TData = unknown>({
 	const [data, setData] = useState<TData | null>(null);
 	const [status, setStatus] = useState<SSEStatus>('pending');
 
+	// Keep reference to the latest `transform` value.
+	// See: https://tkdodo.eu/blog/refs-events-and-escape-hatches#the-latest-ref
+	const transformRef = useRef(transform);
+	transformRef.current = transform;
+
 	useEffect(() => {
 		const eventSource = new EventSource(url, { withCredentials });
 
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
 		eventSource.addEventListener(event, async (e) => {
-			if (!transform) {
+			if (!transformRef.current) {
 				setStatus('success');
 				setData(e.data as TData);
 
@@ -30,7 +35,7 @@ export function useSSE<TData = unknown>({
 			}
 
 			try {
-				const value = await transform(e.data as string);
+				const value = await transformRef.current(e.data as string);
 
 				setStatus('success');
 				setData(value);
@@ -48,7 +53,6 @@ export function useSSE<TData = unknown>({
 		return () => {
 			eventSource.close();
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps -- We don't want to disconnect for every `transform` change.
 	}, [url, event, withCredentials]);
 
 	return {
