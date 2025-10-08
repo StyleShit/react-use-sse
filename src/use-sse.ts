@@ -10,6 +10,7 @@ export type UseSSEArgs<TData> = {
 
 export function useSSE<TData = unknown>({
 	url,
+	event = 'message',
 	withCredentials,
 	transform,
 }: UseSSEArgs<TData>): SSEData<TData> {
