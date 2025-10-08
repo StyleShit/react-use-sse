@@ -1,5 +1,13 @@
 # react-use-sse
 
+## 0.0.3
+
+### Patch Changes
+
+- 3841930: Fix dynamic `transform` callback usage
+- 51fdd19: Add usage documentation for custom events
+- 5a22fa4: Add support for custom events
+
 ## 0.0.2
 
 ### Patch Changes
