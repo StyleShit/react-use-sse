@@ -3,13 +3,13 @@ import { useSSE } from '../../src';
 export const App = () => {
 	const genericEvent = useSSE({
 		url: 'http://localhost:8888',
-		transform: (data) => JSON.parse(data) as { random: number },
+		transform: (data) => JSON.parse(data) as { random: string },
 	});
 
 	const customEvent = useSSE({
 		url: 'http://localhost:8888?event=custom-event',
 		event: 'custom-event',
-		transform: (data) => JSON.parse(data) as { random: number },
+		transform: (data) => JSON.parse(data) as { random: string },
 	});
 
 	if (genericEvent.isPending || customEvent.isPending) {
