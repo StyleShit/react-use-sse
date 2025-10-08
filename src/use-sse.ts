@@ -30,7 +30,7 @@ export function useSSE<TData = unknown>({
 			}
 
 			try {
-				const value = await transform(event.data as string);
+				const value = await transform(e.data as string);
 
 				setStatus('success');
 				setData(value);
@@ -49,7 +49,6 @@ export function useSSE<TData = unknown>({
 			eventSource.close();
 		};
 	}, [url, event, withCredentials]);
-	}, [url, withCredentials]);
 
 	return {
 		data,
