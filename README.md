@@ -76,22 +76,10 @@ SSE supports [custom events](https://developer.mozilla.org/en-US/docs/Web/API/Se
 To use them, you can pass the custom event name using the `event` option:
 
 ```tsx
-import React from 'react';
-import { useSSE } from 'react-use-sse';
-
-function App() {
-  const { data } = useSSE({
-    url: 'https://server.com/stream',
-    event: 'custom-event',
-  });
-
-  return (
-    <div>
-      <h1>React SSE</h1>
-      <p>Updated value from server: {data}</p>
-    </div>
-  );
-}
+const { data } = useSSE({
+  url: 'https://server.com/stream',
+  event: 'custom-event',
+});
 ```
 
 ### Attaching Credentials
