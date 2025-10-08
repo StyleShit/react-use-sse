@@ -24,7 +24,7 @@ export function useSSE<TData = unknown>({
 		eventSource.addEventListener(event, async (e) => {
 			if (!transform) {
 				setStatus('success');
-				setData(event.data as TData);
+				setData(e.data as TData);
 
 				return;
 			}
