@@ -76,7 +76,7 @@ SSE supports [custom events](https://developer.mozilla.org/en-US/docs/Web/API/Se
 To use them, you can pass the custom event name using the `event` option:
 
 ```tsx
-const { data } = useSSE({
+useSSE({
   url: 'https://server.com/stream',
   event: 'custom-event',
 });
