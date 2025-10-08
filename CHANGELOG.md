@@ -1,5 +1,11 @@
 # react-use-sse
 
+## 0.0.4
+
+### Patch Changes
+
+- 6b39578: Fix documentation inconsistency
+
 ## 0.0.3
 
 ### Patch Changes
