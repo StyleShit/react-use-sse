@@ -105,9 +105,52 @@ describe('useSSE', () => {
 			MockEventSource.instance.emit('message', data);
 		});
 
-		// // Assert.
+		// Assert.
 		expect(result.current).toStrictEqual({
 			data: { message: 'test-data' },
+			status: 'success',
+			isPending: false,
+			isSuccess: true,
+			isError: false,
+		});
+	});
+
+	it('should support custom events', async () => {
+		// Arrange.
+		const { result } = renderHook(() =>
+			useSSE({
+				url: 'http://test.com/sse',
+				event: 'custom-event',
+			}),
+		);
+
+		// Act - Open the connection.
+		await act(async () => {
+			MockEventSource.instance.open();
+		});
+
+		// Act - Emit a generic message from server.
+		await act(async () => {
+			MockEventSource.instance.emit('message', 'test-data');
+		});
+
+		// Assert.
+		expect(result.current).toStrictEqual({
+			data: null,
+			status: 'pending',
+			isPending: true,
+			isSuccess: false,
+			isError: false,
+		});
+
+		// Act - Emit a custom message from server.
+		await act(async () => {
+			MockEventSource.instance.emit('custom-event', 'test-custom-data');
+		});
+
+		// Assert.
+		expect(result.current).toStrictEqual({
+			data: 'test-custom-data',
 			status: 'success',
 			isPending: false,
 			isSuccess: true,
@@ -131,7 +174,7 @@ describe('useSSE', () => {
 			MockEventSource.instance.emit('error');
 		});
 
-		// // Assert.
+		// Assert.
 		expect(result.current).toStrictEqual({
 			data: null,
 			status: 'error',
@@ -162,7 +205,7 @@ describe('useSSE', () => {
 			MockEventSource.instance.emit('message', 'test-data');
 		});
 
-		// // Assert.
+		// Assert.
 		expect(result.current).toStrictEqual({
 			data: null,
 			status: 'error',

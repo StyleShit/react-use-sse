@@ -3,6 +3,7 @@ import type { SSEData, SSEStatus } from './types';
 
 export type UseSSEArgs<TData> = {
 	url: string;
+	event?: string;
 	withCredentials?: boolean;
 	transform?: (data: string) => TData | Promise<TData>;
 };
@@ -19,7 +20,7 @@ export function useSSE<TData = unknown>({
 		const eventSource = new EventSource(url, { withCredentials });
 
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
-		eventSource.addEventListener('message', async (event) => {
+		eventSource.addEventListener(event, async (e) => {
 			if (!transform) {
 				setStatus('success');
 				setData(event.data as TData);
@@ -46,7 +47,7 @@ export function useSSE<TData = unknown>({
 		return () => {
 			eventSource.close();
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps -- We don't want to disconnect for every `transform` change.
+	}, [url, event, withCredentials]);
 	}, [url, withCredentials]);
 
 	return {
